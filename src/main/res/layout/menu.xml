@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/menu_start"
+          android:icon="@drawable/icon_start"
+          android:title="Start" />
+ 
+    <item android:id="@+id/menu_stop"
+          android:icon="@drawable/icon_stop"
+          android:title="Stop" />
+ 
+    <item android:id="@+id/menu_forward"
+          android:icon="@drawable/icon_share"
+          android:title="Forward" />
+
+    <item android:id="@+id/menu_preferences"
+          android:icon="@drawable/icon_preferences"
+          android:title="Preferences" />
+</menu>
