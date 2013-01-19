@@ -11,6 +11,7 @@ import java.util.Date
 import android.util.Log
 import rtkaczyk.eris.api.Packet
 import rtkaczyk.eris.api.Common
+import rtkaczyk.eris.api.DeviceId
 import rtkaczyk.eris.sg.TypedResource._
 import java.util.{Collection => JCollection}
 import rtkaczyk.eris.sg._
@@ -28,10 +29,11 @@ extends ArrayAdapter(context, resourceId, packets) with Common {
       .asInstanceOf[LayoutInflater]
 
     val packet = packets get position
+    val device = DeviceId(packet)
     val row = inflater.inflate(R.layout.packet_row, parent, false)
     
-    row findView TR.packet_device  setText packet.name
-    row findView TR.packet_address setText ("(%s)" format packet.address)
+    row findView TR.packet_device  setText device.name
+    row findView TR.packet_address setText ("(%s)" format device.address)
     row findView TR.packet_size    setText ("Size: %d bytes" format packet.data.length)
     row findView TR.packet_date    setText (sdf format new Date(packet.time))
 

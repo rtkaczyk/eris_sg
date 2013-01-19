@@ -36,7 +36,7 @@ class WatchdogService extends Service with Common {
   var eventList = EventList
   
   val receiver = EventReceiver {
-    e => if (eventList contains e.event)
+    case e => if (eventList contains e.event)
       EventQueue add e
   }
   
