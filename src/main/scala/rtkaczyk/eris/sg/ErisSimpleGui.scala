@@ -16,6 +16,7 @@ import rtkaczyk.eris.sg.events.WatchdogService
 import rtkaczyk.eris.sg.config.ConfigActivity
 import android.content.SharedPreferences
 import rtkaczyk.eris.sg.config.ErisConfig
+import android.preference.PreferenceManager
 
 class ErisSimpleGui extends TabActivity with TypedActivity with ApiClient 
 with Toasting with WatchingErisStatus {
@@ -23,7 +24,7 @@ with Toasting with WatchingErisStatus {
   private var stopRequested = false
   private var preferences: SharedPreferences = null
   
-  val prefListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+  val prefListener = new SharedPreferences.OnSharedPreferenceChangeListener {
     override def onSharedPreferenceChanged(prefs: SharedPreferences, key: String) {
       ErisConfig update prefs
       onConfigChanged
@@ -48,7 +49,8 @@ with Toasting with WatchingErisStatus {
     getTabHost addTab eventsSpec
     getTabHost addTab packetsSpec
     
-    
+    PreferenceManager.setDefaultValues(this, "ErisConfig", Context.MODE_PRIVATE, 
+        R.layout.preferences, false)
     preferences = getSharedPreferences("ErisConfig", Context.MODE_PRIVATE)
     ErisConfig update preferences
     preferences registerOnSharedPreferenceChangeListener prefListener
@@ -99,7 +101,7 @@ with Toasting with WatchingErisStatus {
         true
       }
       case R.id.menu_forward => {
-        toast("Forwarding packets")
+        forwardPackets
         true
       }
       case R.id.menu_preferences => {
@@ -132,6 +134,18 @@ with Toasting with WatchingErisStatus {
       if (!isUnbound)
         onUnbindEris
     } else toast("Already disconnected")
+  }
+  
+  def forwardPackets {
+    if (isBound) {
+      val ok = api.forwardPackets
+      if (ok)
+        toast("Forwarding packets")
+      else
+        toast("Forwarding already in progress")
+    }
+    else
+      toast("Not connected to Eris service")
   }
   
   def showConfig {

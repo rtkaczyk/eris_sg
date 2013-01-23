@@ -15,11 +15,17 @@ import android.support.v4.app.FragmentActivity
 class PacketsActivity extends FragmentActivity with TypedActivity with ApiClient {
   
   lazy val adapter = new PacketsAdapter(this)
+  private var queryId = -1
   
   val receiver = EventReceiver {
-    case ConnectionFinished(_, n, _, _) if n > 0 =>
-      refreshAdapter
-    case _ =>
+    case PacketsStored(_, n) => {
+      Log.w(TAG, "Received PacketStored(%d)" format n)
+      if (isBound && n > 0)
+        requestRefresh
+    }
+    case QueryCompleted(id) => 
+      if (id == queryId)
+        refreshAdapter
   }
   
   override def onCreate(savedInstanceState: Bundle) {
@@ -38,7 +44,7 @@ class PacketsActivity extends FragmentActivity with TypedActivity with ApiClient
     Log.d(TAG, "onResume")
     super.onResume
     receiver registerWith this
-    refreshAdapter
+    requestRefresh
   }
   
   override def onPause {
@@ -53,10 +59,17 @@ class PacketsActivity extends FragmentActivity with TypedActivity with ApiClient
     super.onDestroy
   }
   
-  override def onBindEris = refreshAdapter
+  override def onBindEris = requestRefresh
+  
+  private def requestRefresh {
+    queryId = api.selectPackets(0, 0, "", 100)
+  }
   
   private def refreshAdapter {
-    if (isBound)
-      adapter refresh (api.getAllPackets)
+    if (isBound && queryId != -1) {
+      val packets = api.getQuery(queryId)
+      if (packets != null)
+        adapter refresh packets
+    }
   }
 }

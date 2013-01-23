@@ -3,41 +3,54 @@
     <CheckBoxPreference
         android:title="Full discovery"
         android:summary="No connection attempts will be made until full discovery cycle completes"
-        android:key="full_discovery" />
+        android:key="full_discovery" 
+        android:defaultValue="true" />
     
     <EditTextPreference
         android:title="Device name"
         android:summary="A Java regex specifying valid device name"
-        android:key="device_name" />
+        android:key="device_name" 
+        android:defaultValue=".*" />
     
     <EditTextPreference
         android:title="Ignore period"
         android:summary="An interval between consecutive connections to a bluetooth device [seconds]"
         android:key="ignore_period" 
-        android:inputType="number" />
+        android:inputType="number" 
+        android:defaultValue="60" />
     
     <EditTextPreference
         android:title="RFCOMM channel"
         android:summary="RFCOMM channel for communicating with bluetooth devices (1-30)"
         android:key="rfcomm_channel" 
         android:inputType="number"
-        android:maxLength="2" />
+        android:maxLength="2"
+        android:defaultValue="2" />
     
     <EditTextPreference
         android:title="Storage capacity"
         android:summary="SQLite storage capacity [KiB]"
         android:key="storage_capacity" 
-        android:inputType="number" />
+        android:inputType="number"
+        android:defaultValue="10000" />
     
     <CheckBoxPreference
         android:title="Auto forwarding"
         android:summary="Automatic forwarding of packets when network available"
-        android:key="auto_forwarding" />
+        android:key="auto_forwarding"
+        android:defaultValue="false" />
     
     <EditTextPreference
         android:title="Forward address"
         android:summary="Address and port of the machine to forward packets to"
-        android:key="forward_address" />
+        android:key="forward_address"
+        android:defaultValue="" />
     
+    <EditTextPreference
+        android:title="Forwarding interval"
+        android:summary="An interval between attempts to forward packets [seconds]"
+        android:key="forward_interval"
+        android:inputType="number"
+        android:defaultValue="30" />
 
 </PreferenceScreen>

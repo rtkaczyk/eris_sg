@@ -10,8 +10,19 @@ import android.widget.AdapterView
 import android.view.View
 import android.support.v4.app.FragmentManager
 
-class PacketDialog(packet: Packet, manager: FragmentManager) 
-extends DialogFragment with Common {
+object PacketDialog {
+  private var manager: FragmentManager = null
+  private var packet: Packet = null
+  
+  def apply(pkt: Packet, mgr: FragmentManager): PacketDialog = {
+    packet = pkt
+    manager = mgr
+    new PacketDialog
+  }
+}
+
+class PacketDialog extends DialogFragment with Common {
+  import PacketDialog._
   
   override def onCreateDialog(savedInstanceState: Bundle) = {
     val builder = new AlertDialog.Builder(getActivity)
@@ -35,6 +46,6 @@ extends OnItemClickListener {
   
   override def onItemClick(parent: AdapterView[_], view: View, 
       position: Int, id: Long) {
-    new PacketDialog(adapter(position), manager).show
+    PacketDialog(adapter(position), manager).show
   }
 }
